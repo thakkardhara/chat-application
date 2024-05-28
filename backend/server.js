@@ -1,7 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import AuthRoutes from "../backend/routes/AuthRoutes.js";
-import MessageRoutes from '../backend/routes/MessageRoutes.js'
+import MessageRoutes from '../backend/routes/MessageRoutes.js';
+import UserRoutes from '../backend/routes/UserRoutes.js'
 import connectDB from "./db/Connect.js";
 import cookieParser from "cookie-parser";
 
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", AuthRoutes);
 app.use("/api/message",MessageRoutes);
+app.use("/api/users",UserRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
