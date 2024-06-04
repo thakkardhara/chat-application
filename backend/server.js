@@ -41,7 +41,7 @@ import MessageRoutes from '../backend/routes/MessageRoutes.js';
 import UserRoutes from '../backend/routes/UserRoutes.js';
 import connectDB from "./db/Connect.js";
 import cookieParser from "cookie-parser";
-
+import { app, server } from "./socket/Socket.js";
 // Load environment variables
 dotenv.config();
 
@@ -49,7 +49,7 @@ console.log("Environment Variables Loaded:");
 console.log("MONGO_URI:", process.env.MONGO_URI);
 console.log("PORT:", process.env.PORT);
 
-const app = express();
+// const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Use JSON parser and cookie parser middleware
@@ -62,7 +62,7 @@ connectDB()
         console.log("Connected to MongoDB");
 
         // Start the server
-        app.listen(PORT, () => {
+        server.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });
     })

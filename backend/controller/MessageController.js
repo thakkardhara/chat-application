@@ -2,6 +2,7 @@
 
 import Conversation from '../models/ConversationModel.js';
 import Message from "../models/MessageModel.js";
+import { getReceiverSocketId, io } from '../socket/Socket.js';
 
 export const sendMsg = async (req, res) => {
   try {
@@ -35,9 +36,15 @@ export const sendMsg = async (req, res) => {
       conversation.messages.push(newMessage._id);
     }
   
-    // socket code aiya 
+
 
     await Promise.all([conversation.save(),newMessage.save()])
+
+        // socket code aiya 
+        const recevierSocketId= getReceiverSocketId(receiverId);
+        if(recevierSocketId){
+          io.to(recevierSocketId).emit("newmsg:",newMessage) // send events to specific client
+        }
 
     res.status(201).json(newMessage);
 
