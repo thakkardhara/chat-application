@@ -4,7 +4,8 @@ import Messages from "./Messages"
 import useConversation from '../../zustand/UseConversation'
 import { useEffect } from 'react'
 import { useAuthContext } from '../../context/AuthContext'
-
+// import { MdAddIcCall } from "react-icons/md";
+// import { FaVideo } from "react-icons/fa";
 const MessageDisplay = () => {
   // const noChats = false;
 
@@ -23,10 +24,21 @@ const MessageDisplay = () => {
       ) :(
         <>
         {/* header */}
-        <div className="bg-slate-500 px-4 py-2 mb-2">
+        {/* <div className="bg-slate-500 px-4 py-2 mb-2">
           <span className="label-text">To:</span>
           <span className="text-gray-900 font-bold">{selectedConversation.fullname}</span>
-        </div>
+        </div> */}
+{/* 
+<div className="bg-slate-500 px-4 py-2 mb-2 flex justify-between items-center">
+    <div>
+        <span className="label-text">To:</span>
+        <span className="text-gray-900 font-bold ml-2">{selectedConversation.fullname}</span>
+    </div>
+    <div className="flex items-center space-x-4">
+        <MdAddIcCall className="text-white" />
+        <FaVideo className="text-white" />
+    </div>
+</div> */}
         <Messages />
         <MessageInput />
       </>
