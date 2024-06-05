@@ -42,4 +42,3 @@ const Conversation = ({ conversation, lastIdx, emoji }) => {
 }
 
 export default Conversation
-

@@ -41,9 +41,10 @@ export const sendMsg = async (req, res) => {
     await Promise.all([conversation.save(),newMessage.save()])
 
         // socket code aiya 
-        const recevierSocketId= getReceiverSocketId(receiverId);
-        if(recevierSocketId){
-          io.to(recevierSocketId).emit("newmsg:",newMessage) // send events to specific client
+        const receiverSocketId = getReceiverSocketId(receiverId);
+        if (receiverSocketId) {
+          // io.to(<socket_id>).emit() used to send events to specific client
+          io.to(receiverSocketId).emit("newMessage", newMessage);
         }
 
     res.status(201).json(newMessage);
@@ -77,23 +78,4 @@ export const  getMsg = async(req,res)=>{
     
   }
 }
-
-// export const deleteMsg = async(req,res)=>{
-//   try {
-//     const {id:msgId}= req.params;
-//     const senderId = req.user._id;
-//     const conversation = await Conversation.findOne({
-//       participants:{$all:[senderId,msgId]}
-//       }).populate("messages");
-//       const message = conversation.messages.id(msgId);
-//       message.remove();
-//       await conversation.save();
-
-    
-//   } catch (error) {
-//     console.log("Error in deleting message",error.message)
-//     res.status(500).json({error:"Internal server Error"})
-    
-//   }
-// }
 

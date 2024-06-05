@@ -8,16 +8,27 @@ const UseListenMesg = () => {
     const {socket} = useSocketContext()
     const {messages,setMessages}= useConversation();
 
-    useEffect (()=>{
-        socket?.on("newMessgae",(newMessage)=>{
-            newMessage.shouldShake = true;
-            const sound = new Audio(notificationSound)
-            sound.play();
-            setMessages([...messages,newMessage])
-        })
-        return()=> socket?.off("newMwssage")
+    // useEffect (()=>{
+    //     socket?.on("newMessgae",(newMessage)=>{
+    //         newMessage.shouldShake = true;
+    //         const sound = new Audio(notificationSound)
+    //         sound.play();
+    //         setMessages([...messages,newMessage])
+    //     })
+    //     return()=> socket?.off("newMwssage")
 
-    },[socket,setMessages,messages])
+    // },[socket,setMessages,messages])
+
+    useEffect (()=>{
+        socket?.on("newMessage",(newMessage)=>{
+            newMessage.shouldShake = true;
+            const sound = new Audio(notificationSound);
+            sound.play();
+            setMessages([...messages,newMessage]);
+        });
+        return()=> socket?.off("newMessage");
+    },[socket,setMessages,messages]);
+    
 
 
 }
