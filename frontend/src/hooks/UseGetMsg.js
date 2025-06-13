@@ -10,22 +10,26 @@ const UseGetMsg = () => {
         const getMsg = async()=>{
             setLoading(true);
             try {
-                const res = await fetch(`/api/message/${selectedConversation._id}`)
+                if (!selectedConversation?._id) return;
+                // Use different endpoint for group vs single
+                const url = selectedConversation.isGroup
+                    ? `/api/message/${selectedConversation._id}?isGroup=true`
+                    : `/api/message/${selectedConversation._id}`;
+
+                const res = await fetch(url)
                 const data = await res.json()
                 if(data.error) throw new Error(data.error)
-                    setMessages(data)
-                
+                setMessages(data)
             } catch (error) {
                 console.error('Error sending message:', error);
                 toast.error(error.message);
-                
             } finally {
                 setLoading(false);
             }
         }
-        if(selectedConversation?._id) getMsg()
-    },[selectedConversation?._id,setMessages])
-return{messages,loading}
+        getMsg()
+    },[selectedConversation?._id, selectedConversation?.isGroup, setMessages])
+    return{messages,loading}
 }
 
 export default UseGetMsg

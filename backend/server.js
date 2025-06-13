@@ -1,10 +1,10 @@
-
 import path from 'path';
 import express from "express";
 import dotenv from "dotenv";
 import AuthRoutes from "../backend/routes/AuthRoutes.js";
 import MessageRoutes from '../backend/routes/MessageRoutes.js';
 import UserRoutes from '../backend/routes/UserRoutes.js';
+import GroupRoutes from "../backend/routes/GroupRoutes.js";
 import connectDB from "./db/Connect.js";
 import cookieParser from "cookie-parser";
 import { app, server } from "./socket/Socket.js";
@@ -45,6 +45,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", AuthRoutes);
 app.use("/api/message", MessageRoutes);
 app.use("/api/users", UserRoutes);
+app.use("/api/group", GroupRoutes);
 
 //express.static is middleware
 app.use(express.static(path.join(__dirname,"/frontend/dist")))//deploye time ae bane (build karaiye frontend tyar)

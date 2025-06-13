@@ -1,0 +1,12 @@
+node_modules/
+
+# Ignore frontend and backend node_modules
+/frontend/node_modules/
+/backend/node_modules/
+
+# Logs
+*.log
+
+# OS/Editor specific
+.DS_Store
+.env

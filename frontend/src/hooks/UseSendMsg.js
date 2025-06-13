@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import toast from 'react-hot-toast';
 import useConversation from "../zustand/UseConversation";
@@ -10,7 +9,12 @@ const UseSendMsg = () => {
     const sendMsg = async (message) => {
         setLoading(true);
         try {
-            const res = await fetch(`/api/message/send/${selectedConversation._id}`, {
+            // Use different endpoint for group vs single
+            const url = selectedConversation.isGroup
+                ? `/api/message/send/${selectedConversation._id}?isGroup=true`
+                : `/api/message/send/${selectedConversation._id}`;
+
+            const res = await fetch(url, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
