@@ -9,6 +9,7 @@ import GroupRoutes from "../backend/routes/GroupRoutes.js";
 import connectDB from "./db/Connect.js";
 import cookieParser from "cookie-parser";
 import { app, server } from "./socket/Socket.js";
+import cors from "cors";
 // Load environment variables
 dotenv.config();
 
@@ -25,6 +26,10 @@ const __dirname = path.dirname(__filename);
 // Use JSON parser and cookie parser middleware
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors({
+  origin: "*", // ya aapka vercel domain
+  credentials: true
+}));
 
 // Connect to the database
 connectDB()
