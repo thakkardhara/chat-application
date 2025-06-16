@@ -1,4 +1,3 @@
-
 import { Server } from "socket.io";
 import http from "http";
 import express from "express";
@@ -13,27 +12,57 @@ const io = new Server(server, {
 	},
 });
 
-export const getReceiverSocketId = (receiverId) => {
-	return userSocketMap[receiverId];
-};
-
 const userSocketMap = {}; // {userId: socketId}
+
+export const getReceiverSocketId = (receiverId) => {
+    console.log("userSocketMap:", userSocketMap); // Debug
+    return userSocketMap[receiverId];
+};
 
 io.on("connection", (socket) => {
 	console.log("a user connected", socket.id);
 
 	const userId = socket.handshake.query.userId;
-	if (userId != "undefined") userSocketMap[userId] = socket.id;
+	if (userId && userId !== "undefined") {
+		// Remove old mapping for this userId (if any)
+		if (userSocketMap[userId]) {
+			delete userSocketMap[userId];
+		}
+		// Remove any mapping where socket.id is already present (edge case)
+		Object.keys(userSocketMap).forEach((key) => {
+			if (userSocketMap[key] === socket.id) {
+				delete userSocketMap[key];
+			}
+		});
+		userSocketMap[userId] = socket.id;
+		console.log(`User ${userId} mapped to socket ${socket.id}`);
+	}
 
-	// io.emit() is used to send events to all the connected clients
-	io.emit("getOnlineUsers", Object.keys(userSocketMap));
+	const onlineUsers = Object.keys(userSocketMap);
+	io.emit("getOnlineUsers", onlineUsers);
+	console.log("Sent online users:", onlineUsers);
 
-	// socket.on() is used to listen to the events. can be used both on client and server side
 	socket.on("disconnect", () => {
 		console.log("user disconnected", socket.id);
-		delete userSocketMap[userId];
-		io.emit("getOnlineUsers", Object.keys(userSocketMap));
+		if (userId && userId !== "undefined") {
+			delete userSocketMap[userId];
+			const updatedOnlineUsers = Object.keys(userSocketMap);
+			io.emit("getOnlineUsers", updatedOnlineUsers);
+			console.log("Updated online users after disconnect:", updatedOnlineUsers);
+		}
+	});
+
+	// Listen for incoming messages (optional, for debug)
+	socket.on("newMessage", (data) => {
+		const receiverSocketId = getReceiverSocketId(data.receiverId);
+		console.log("receiverSocketId for", data.receiverId, "is", receiverSocketId);
+		if (receiverSocketId) {
+			io.to(receiverSocketId).emit("newMessage", data);
+		}
+		io.to(socket.id).emit("newMessage", data);
 	});
 });
 
 export { app, io, server };
+
+

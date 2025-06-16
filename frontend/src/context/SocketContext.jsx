@@ -14,10 +14,9 @@ export const SocketContextProvider = ({children})=>{
     const {authUser} = useAuthContext();
     useEffect(()=>{
         if(authUser){
-            const socket = io("http://localhost:5000",{
-                query:{
-                    userId: authUser._id,
-                }
+             console.log("SocketContext authUser:", authUser);
+            const socket = io("http://localhost:5000", {
+                query: { userId: authUser?._id }
             })  ;
 
             setSocket(socket);
@@ -42,4 +41,6 @@ export const SocketContextProvider = ({children})=>{
 
     return <SocketContext.Provider value={{ socket,onlineUsers }} >{children}</SocketContext.Provider>
 }
+
+export default SocketContext;
 

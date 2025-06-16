@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import toast from 'react-hot-toast';
 import useConversation from "../zustand/UseConversation";
+import  SocketContext  from "../context/SocketContext"; // <-- import context
 
 const UseSendMsg = () => {
     const [loading, setLoading] = useState(false);
-    const { messages, setMessages, selectedConversation } = useConversation();
+    const { selectedConversation } = useConversation();
+    const { socket } = useContext(SocketContext); // <-- get socket
 
     const sendMsg = async (message) => {
         setLoading(true);
@@ -29,7 +31,18 @@ const UseSendMsg = () => {
             }
 
             const data = await res.json();
-            setMessages([...messages, data]);
+
+            // Emit newMessage event via socket
+            if (socket && selectedConversation && !selectedConversation.isGroup) {
+                socket.emit("newMessage", {
+                    ...data,
+                    receiverId: selectedConversation._id
+                });
+                console.log("Emitted newMessage via socket:", {
+                    ...data,
+                    receiverId: selectedConversation._id
+                });
+            }
         } catch (error) {
             console.error('Error sending message:', error);
             toast.error(error.message);
@@ -37,6 +50,12 @@ const UseSendMsg = () => {
             setLoading(false);
         }
     };
+
+    const handleSend = () => {
+        // ...message object banao...
+        socket.emit("newMessage", newMessage);
+        // setMessages() yahan mat karo!
+    }
 
     return { sendMsg, loading };
 };

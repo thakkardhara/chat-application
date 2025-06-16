@@ -1,13 +1,19 @@
-import {create} from 'zustand';
+import { create } from "zustand";
 
-//get the set as callback function just like useState
-
-const useConversation = create((set)=>({
-    selectedConversation:null, //default selected conversation is null
-    setSelectedConversation:(selectedConversation)=> set({selectedConversation}) ,// it update the state with updating 
-    messages:[],
-    // setMessages:(messages)=> set({messages})
-    setMessages:(messages) => set({ messages }),
-}))
+const useConversation = create((set) => ({
+    messages: [],
+    setMessages: (fn) => set((state) => ({
+        messages: typeof fn === "function" ? fn(state.messages) : fn
+    })),
+    addMessage: (msg) => set((state) => {
+        // Duplicate check by _id
+        if (state.messages.some(m => m._id === msg._id)) return {};
+        return { messages: [...state.messages, msg] };
+    }),
+    selectedConversation: null, //default selected conversation is null
+    setSelectedConversation: (selectedConversation) => set({ selectedConversation }), // it update the state with updating 
+}));
 
 export default useConversation;
+
+

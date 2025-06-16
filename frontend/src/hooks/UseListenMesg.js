@@ -4,33 +4,20 @@ import useConversation from "../zustand/UseConversation"
 import notificationSound from '../assets/sounds/notification.mp3'
 
 const UseListenMesg = () => {
+    const { socket } = useSocketContext();
+    const { addMessage } = useConversation(); // <-- yahan change
 
-    const {socket} = useSocketContext()
-    const {messages,setMessages}= useConversation();
-
-    // useEffect (()=>{
-    //     socket?.on("newMessgae",(newMessage)=>{
-    //         newMessage.shouldShake = true;
-    //         const sound = new Audio(notificationSound)
-    //         sound.play();
-    //         setMessages([...messages,newMessage])
-    //     })
-    //     return()=> socket?.off("newMwssage")
-
-    // },[socket,setMessages,messages])
-
-    useEffect (()=>{
-        socket?.on("newMessage",(newMessage)=>{
+    useEffect(() => {
+        if (!socket) return;
+        const handler = (newMessage) => {
             newMessage.shouldShake = true;
             const sound = new Audio(notificationSound);
             sound.play();
-            setMessages([...messages,newMessage]);
-        });
-        return()=> socket?.off("newMessage");
-    },[socket,setMessages,messages]);
-    
-
-
+            addMessage(newMessage); // <-- yahan change
+        };
+        socket.on("newMessage", handler);
+        return () => socket.off("newMessage", handler);
+    }, [socket, addMessage]);
 }
 
-export default UseListenMesg
+export default UseListenMesg;

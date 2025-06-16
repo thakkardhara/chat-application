@@ -15,6 +15,7 @@ setTimeout(()=>{
 
 },[messages])
   console.log("Msg=",messages);
+  if (!Array.isArray(messages)) return null; // ya koi fallback
   return (
     <div className="px-4 flex-1 overflow-auto">
       
