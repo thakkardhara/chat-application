@@ -10,7 +10,7 @@ const UseSignup = () => {
      const success = handleInputErrors({fullname,username,password,confirmPassword,gender})
      if(!success) return;
      try {
-        const res = await fetch('/api/auth/signup',{
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/signup`, {
             method: "POST",
             headers:{"content-type":"application/json"},
             body: JSON.stringify({fullname,username,password,confirmPassword,gender})

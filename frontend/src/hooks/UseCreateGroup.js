@@ -7,7 +7,7 @@ const UseCreateGroup = () => {
   const createGroup = async ({ groupName, members }) => {
     setLoading(true);
     try {
-      const res = await fetch("/api/group/create", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/group/create`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ groupName, members }),

@@ -1,4 +1,5 @@
-import path from 'path';
+import path from "path";
+import { fileURLToPath } from "url";
 import express from "express";
 import dotenv from "dotenv";
 import AuthRoutes from "../backend/routes/AuthRoutes.js";
@@ -17,7 +18,9 @@ console.log("PORT:", process.env.PORT);
 
 // const app = express();
 const PORT = process.env.PORT || 5000;
-const __dirname = path.resolve() //for deploye
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Use JSON parser and cookie parser middleware
 app.use(express.json());
@@ -48,8 +51,9 @@ app.use("/api/users", UserRoutes);
 app.use("/api/group", GroupRoutes);
 
 //express.static is middleware
-app.use(express.static(path.join(__dirname,"/frontend/dist")))//deploye time ae bane (build karaiye frontend tyar)
+// Serve static files from frontend/dist
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-app.get("*",(req,res)=>{
-    res.sendFile(path.join(__dirname,"frontend","dist","index.html")) // now able to run frontend from server
-})
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+});

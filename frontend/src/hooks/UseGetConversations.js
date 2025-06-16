@@ -11,8 +11,8 @@ const UseGetConversations = () => {
             setLoading(true);
             try {
                 const [usersRes, groupsRes] = await Promise.all([
-                    fetch('/api/users'),
-                    fetch('/api/group')
+                    fetch(`${import.meta.env.VITE_API_URL}/api/users`),
+                    fetch(`${import.meta.env.VITE_API_URL}/api/group`)
                 ]);
                 const usersData = await usersRes.json();
                 const groupsData = await groupsRes.json();

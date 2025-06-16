@@ -13,8 +13,8 @@ const UseSendMsg = () => {
         try {
             // Use different endpoint for group vs single
             const url = selectedConversation.isGroup
-                ? `/api/message/send/${selectedConversation._id}?isGroup=true`
-                : `/api/message/send/${selectedConversation._id}`;
+                ? `${import.meta.env.VITE_API_URL}/api/message/send/${selectedConversation._id}?isGroup=true`
+                : `${import.meta.env.VITE_API_URL}/api/message/send/${selectedConversation._id}`;
 
             const res = await fetch(url, {
                 method: "POST",
