@@ -15,7 +15,7 @@ export const SocketContextProvider = ({children})=>{
     useEffect(()=>{
         if(authUser){
              console.log("SocketContext authUser:", authUser);
-            const socket = io('http://localhost:5000', {
+            const socket = io('https://chat-application-nod4.onrender.com', {
                 query: { userId: authUser?._id }
             })  ;
 

@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 import useConversation from "../zustand/UseConversation";
 import { useEffect, useState } from 'react';
-
+import Cookies from 'js-cookie';
 const UseGetMsg = () => {
     const [loading, setLoading] = useState(false)
     const { messages, setMessages, selectedConversation } = useConversation();
@@ -9,17 +9,23 @@ const UseGetMsg = () => {
     useEffect(()=>{
         const getMsg = async()=>{
             setLoading(true);
+            const token = Cookies.get("accessToken");
             try {
                 if (!selectedConversation?._id) return;
                 // Use different endpoint for group vs single
                 const url = selectedConversation.isGroup
-                    // ? `${import.meta.env.VITE_API_URL}/api/message/${selectedConversation._id}?isGroup=true`
-                    // : `${import.meta.env.VITE_API_URL}/api/message/${selectedConversation._id}`;
+                
 
-                         ? `/api/message/${selectedConversation._id}?isGroup=true`
-                    : `/api/message/${selectedConversation._id}`;
+                         ? `https://chat-application-nod4.onrender.com/api/message/${selectedConversation._id}?isGroup=true`
+                    : `https://chat-application-nod4.onrender.com/api/message/${selectedConversation._id}`;
 
-                const res = await fetch(url)
+                   const res = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        });
                 const data = await res.json()
                 if(data.error) throw new Error(data.error)
                 setMessages(data)

@@ -1,15 +1,20 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
+import Cookies from "js-cookie";
 
 const UseCreateGroup = () => {
   const [loading, setLoading] = useState(false);
 
   const createGroup = async ({ groupName, members }) => {
     setLoading(true);
+    const token = Cookies.get("accessToken");
     try {
-      const res = await fetch('/api/group/create', {
+      const res = await fetch('https://chat-application-nod4.onrender.com/api/group/create', {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` 
+        },
         body: JSON.stringify({ groupName, members }),
       });
       const data = await res.json();

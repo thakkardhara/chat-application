@@ -1,6 +1,7 @@
 import { useState } from "react"
 import toast from 'react-hot-toast'
 import {useAuthContext} from '../context/AuthContext'
+import Cookies from 'js-cookie'
 
 const UseSignup = () => {
     const [loading,setLoading]= useState(false);
@@ -9,10 +10,13 @@ const UseSignup = () => {
     const signup = async({fullname,username,password,confirmPassword,gender})=>{
      const success = handleInputErrors({fullname,username,password,confirmPassword,gender})
      if(!success) return;
+     const token = Cookies.get("accessToken");
      try {
-        const res = await fetch('/api/auth/signup', {
+        const res = await fetch('https://chat-application-nod4.onrender.com/api/auth/signup', {
             method: "POST",
-            headers:{"content-type":"application/json"},
+            headers:{"content-type":"application/json",
+                "Authorization": `Bearer ${token}`
+            },
             body: JSON.stringify({fullname,username,password,confirmPassword,gender})
         })
         const data = await res.json();

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import Cookies from 'js-cookie';
 
 const UseGetConversations = () => {
   const [loading, setLoading] = useState(false);
@@ -7,27 +8,25 @@ const UseGetConversations = () => {
   const [groups, setGroups] = useState([]);
 
   useEffect(() => {
+    const token = Cookies.get("accessToken");
     const fetchData = async () => {
       setLoading(true);
       try {
         const [usersRes, groupsRes] = await Promise.all([
-            fetch('/api/users'),
-            fetch('/api/group')
-        ]);
+    fetch('https://chat-application-nod4.onrender.com/api/users', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+    fetch('https://chat-application-nod4.onrender.com/api/group', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+  ]);
 
-        // const token = localStorage.getItem("chat-token");
-        // const [usersRes, groupsRes] = await Promise.all([
-        //   fetch(`${import.meta.env.VITE_API_URL}/api/users`, {
-        //     headers: {
-        //       Authorization: `Bearer ${token}`, // ✅ Add this
-        //     },
-        //   }),
-        //   fetch(`${import.meta.env.VITE_API_URL}/api/group`, {
-        //     headers: {
-        //       Authorization: `Bearer ${token}`, // ✅ Add this
-        //     },
-        //   }),
-        // ]);
+
+        
 
         const usersData = await usersRes.json();
         const groupsData = await groupsRes.json();

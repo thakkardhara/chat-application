@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import toast from 'react-hot-toast';
 import useConversation from "../zustand/UseConversation";
 import  SocketContext  from "../context/SocketContext"; // <-- import context
+import Cookies from 'js-cookie';
 
 const UseSendMsg = () => {
     const [loading, setLoading] = useState(false);
@@ -10,19 +11,21 @@ const UseSendMsg = () => {
 
     const sendMsg = async (message) => {
         setLoading(true);
+        const token = Cookies.get("accessToken");
         try {
             // Use different endpoint for group vs single
             const url = selectedConversation.isGroup
                 // ? `${import.meta.env.VITE_API_URL}/api/message/send/${selectedConversation._id}?isGroup=true`
                 // : `${import.meta.env.VITE_API_URL}/api/message/send/${selectedConversation._id}`;
 
-                         ? `/api/message/send/${selectedConversation._id}?isGroup=true`
-                : `/api/message/send/${selectedConversation._id}`;
+                         ? `https://chat-application-nod4.onrender.com/api/message/send/${selectedConversation._id}?isGroup=true`
+                : `https://chat-application-nod4.onrender.com/api/message/send/${selectedConversation._id}`;
 
             const res = await fetch(url, {
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({ message })
             });

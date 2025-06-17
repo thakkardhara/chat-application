@@ -1,18 +1,20 @@
 import { useState } from 'react';
 import { useAuthContext } from '../context/AuthContext';
 import toast from 'react-hot-toast';
-
+import Cookies from 'js-cookie';
 const UseLogout = () => {
   const [loading, setLoading] = useState(false);
   const { setauthUser } = useAuthContext();
 
   const logout = async () => {
     setLoading(true);
+    const token = Cookies.get("accessToken");
     try {
-      const res = await fetch('/api/auth/logout', {
+      const res = await fetch('https://chat-application-nod4.onrender.com/api/auth/logout', {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         }
       });
 

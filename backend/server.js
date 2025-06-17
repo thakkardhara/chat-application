@@ -27,7 +27,7 @@ const __dirname = path.dirname(__filename);
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: "*", // ya aapka vercel domain
+  origin: "http://localhost:3000", // ya aapka vercel domain
   credentials: true
 }));
 
