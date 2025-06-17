@@ -8,14 +8,15 @@ const UseLogout = () => {
 
   const logout = async () => {
     setLoading(true);
-    const token = Cookies.get("accessToken");
+    // const token = Cookies.get("jwt");
     try {
       const res = await fetch('https://chat-application-nod4.onrender.com/api/auth/logout', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          // "Authorization": `Bearer ${token}`
         }
+      , credentials: "include"
       });
 
       const data = await res.json();

@@ -9,7 +9,7 @@ const UseGetMsg = () => {
     useEffect(()=>{
         const getMsg = async()=>{
             setLoading(true);
-            const token = Cookies.get("accessToken");
+            // const token = Cookies.get("jwt");
             try {
                 if (!selectedConversation?._id) return;
                 // Use different endpoint for group vs single
@@ -21,9 +21,10 @@ const UseGetMsg = () => {
 
                    const res = await fetch(url, {
           method: "GET",
+            credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            // "Authorization": `Bearer ${token}`
           }
         });
                 const data = await res.json()

@@ -11,13 +11,12 @@ const UseLogin = () => {
         const success = handleInputErrors({username,password})
         if(!success) return;
         setLoading(true)
-        const token = Cookies.get("accessToken");
         try {
             const res = await fetch('https://chat-application-nod4.onrender.com/api/auth/login',{
                 method: "POST",
                 headers:{"content-type":"application/json",
-                    "Authorization": `Bearer ${token}`
                 },
+                credentials: "include",
                 body: JSON.stringify({username,password})
             })
             const data = await res.json();
