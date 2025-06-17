@@ -10,24 +10,24 @@ const UseGetConversations = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        // const [usersRes, groupsRes] = await Promise.all([
-        //     fetch(`${import.meta.env.VITE_API_URL}/api/users`),
-        //     fetch(`${import.meta.env.VITE_API_URL}/api/group`)
-        // ]);
-
-        const token = localStorage.getItem("chat-token");
         const [usersRes, groupsRes] = await Promise.all([
-          fetch(`${import.meta.env.VITE_API_URL}/api/users`, {
-            headers: {
-              Authorization: `Bearer ${token}`, // ✅ Add this
-            },
-          }),
-          fetch(`${import.meta.env.VITE_API_URL}/api/group`, {
-            headers: {
-              Authorization: `Bearer ${token}`, // ✅ Add this
-            },
-          }),
+            fetch(`${import.meta.env.VITE_API_URL}/api/users`),
+            fetch(`${import.meta.env.VITE_API_URL}/api/group`)
         ]);
+
+        // const token = localStorage.getItem("chat-token");
+        // const [usersRes, groupsRes] = await Promise.all([
+        //   fetch(`${import.meta.env.VITE_API_URL}/api/users`, {
+        //     headers: {
+        //       Authorization: `Bearer ${token}`, // ✅ Add this
+        //     },
+        //   }),
+        //   fetch(`${import.meta.env.VITE_API_URL}/api/group`, {
+        //     headers: {
+        //       Authorization: `Bearer ${token}`, // ✅ Add this
+        //     },
+        //   }),
+        // ]);
 
         const usersData = await usersRes.json();
         const groupsData = await groupsRes.json();
