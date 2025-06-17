@@ -13,8 +13,11 @@ const UseGetMsg = () => {
                 if (!selectedConversation?._id) return;
                 // Use different endpoint for group vs single
                 const url = selectedConversation.isGroup
-                    ? `${import.meta.env.VITE_API_URL}/api/message/${selectedConversation._id}?isGroup=true`
-                    : `${import.meta.env.VITE_API_URL}/api/message/${selectedConversation._id}`;
+                    // ? `${import.meta.env.VITE_API_URL}/api/message/${selectedConversation._id}?isGroup=true`
+                    // : `${import.meta.env.VITE_API_URL}/api/message/${selectedConversation._id}`;
+
+                         ? `/api/message/${selectedConversation._id}?isGroup=true`
+                    : `/api/message/${selectedConversation._id}`;
 
                 const res = await fetch(url)
                 const data = await res.json()

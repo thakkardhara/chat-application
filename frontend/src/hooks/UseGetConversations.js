@@ -11,8 +11,8 @@ const UseGetConversations = () => {
       setLoading(true);
       try {
         const [usersRes, groupsRes] = await Promise.all([
-            fetch(`${import.meta.env.VITE_API_URL}/api/users`),
-            fetch(`${import.meta.env.VITE_API_URL}/api/group`)
+            fetch('/api/users'),
+            fetch('/api/group')
         ]);
 
         // const token = localStorage.getItem("chat-token");
