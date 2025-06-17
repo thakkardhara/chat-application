@@ -8,19 +8,26 @@ const SearchBar = () => {
   const [search,setSearch]= useState("");
   const {setSelectedConversation}= useConversation();
   const {conversations}= UseGetConversations()
-  const handleSubmit = (e)=>{
-    e.preventDefault()
-    if(!search)return;
-    if(search.length < 3){
-      return toast.error('search term must be at least 3 char long ')
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!search) return;
+    if (search.length < 3) {
+      return toast.error("Search term must be at least 3 characters long");
     }
-    const conversation = conversations?.find((c)=> c.fullname.toLowerCase().includes(search.toLowerCase()))
-    if(conversation){
-      setSelectedConversation(conversation)
-      setSearch('')
-    }else toast.error(`no user found with name ${search}`)
-   
-  }
+
+    // ✅ Fix: safely handle missing fullname
+    const conversation = conversations?.find((c) =>
+      c?.fullname?.toLowerCase().includes(search.toLowerCase())
+    );
+
+    if (conversation) {
+      setSelectedConversation(conversation);
+      setSearch("");
+    } else {
+      toast.error(`No user found with name "${search}"`);
+    }
+  };
 
   return (
     <>
