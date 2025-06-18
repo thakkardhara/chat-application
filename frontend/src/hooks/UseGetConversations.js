@@ -8,7 +8,7 @@ const UseGetConversations = () => {
   const [groups, setGroups] = useState([]);
 
   useEffect(() => {
-    // const token = Cookies.get("jwt");
+    const token = Cookies.get("jwt");
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -16,13 +16,13 @@ const UseGetConversations = () => {
     fetch('https://chat-application-nod4.onrender.com/api/users', {
       credentials: 'include',
       headers: {
-        // Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     }),
     fetch('https://chat-application-nod4.onrender.com/api/group', {
        credentials: 'include',
       headers: {
-        // Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     }),
   ]);

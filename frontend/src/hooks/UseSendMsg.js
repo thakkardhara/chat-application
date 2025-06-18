@@ -11,7 +11,7 @@ const UseSendMsg = () => {
 
     const sendMsg = async (message) => {
         setLoading(true);
-        // const token = Cookies.get("jwt");
+        const token = Cookies.get("jwt");
         try {
             // Use different endpoint for group vs single
             const url = selectedConversation.isGroup
@@ -25,7 +25,7 @@ const UseSendMsg = () => {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
-                    // "Authorization": `Bearer ${token}`
+                    "Authorization": `Bearer ${token}`
                 },
                 credentials: "include",
                 body: JSON.stringify({ message })

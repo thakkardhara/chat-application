@@ -10,12 +10,12 @@ const UseSignup = () => {
     const signup = async({fullname,username,password,confirmPassword,gender})=>{
      const success = handleInputErrors({fullname,username,password,confirmPassword,gender})
      if(!success) return;
-    //  const token = Cookies.get("jwt");
+     const token = Cookies.get("jwt");
      try {
         const res = await fetch('https://chat-application-nod4.onrender.com/api/auth/signup', {
             method: "POST",
             headers:{"content-type":"application/json",
-                // "Authorization": `Bearer ${token}`
+                "Authorization": `Bearer ${token}`
             },
             credentials: "include",
             body: JSON.stringify({fullname,username,password,confirmPassword,gender})
