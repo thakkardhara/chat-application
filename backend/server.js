@@ -27,7 +27,10 @@ const __dirname = path.dirname(__filename);
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: "http://localhost:3000", // ya aapka vercel domain
+   origin: [
+      "http://localhost:3000",
+      "https://chatapp-front-uyuk.onrender.com", // ✅ Add your deployed frontend here
+    ],
   credentials: true
 }));
 
