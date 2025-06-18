@@ -8,8 +8,7 @@ const genrateToken = (userId,res)=>{
     res.cookie("jwt", token,{
         maxAge: 15 * 24 * 60 * 60 * 1000,
         httpOnly:true, //to prevent cross site attcakes
-        sameSite:"None",
-        
+        sameSite:"None",        
         secure: true
         
     })

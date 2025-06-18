@@ -23,7 +23,7 @@ const protectRoutes = async(req,res,next)=>{
             }
 
         req.user = user
-        onsole.log("✅ User authenticated:", user.username);
+        console.log("✅ User authenticated:", user.username);
         next()
   
     } catch (error) {
