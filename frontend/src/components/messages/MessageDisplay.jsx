@@ -19,20 +19,7 @@ const MessageDisplay = () => {
   }, [setSelectedConversation]);
 
   return (
-  <div className="flex flex-col h-full w-full relative">
-     {isMobileView && (
-  <div className="flex items-center p-3 border-b border-gray-600 bg-gray-800">
-    <button
-      className="text-white flex items-center gap-2 px-3 py-1 rounded-full bg-purple-600 hover:bg-purple-700 transition"
-      onClick={() => setMobileView(false)}
-    >
-      <IoArrowBack className="text-lg" />
-      <span className="text-sm font-medium">Back</span>
-    </button>
-  </div>
-)}
-      {
-            <div className="md:min-w-[450px] flex flex-col">
+    <div className="md:min-w-[450px] flex flex-col">
       {!selectedConversation ? (
         <NoChats />
       ) : (
@@ -59,8 +46,6 @@ const MessageDisplay = () => {
           <MessageInput />
         </>
       )}
-    </div>
-      }
     </div>
   );
 };

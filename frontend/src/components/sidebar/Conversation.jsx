@@ -1,7 +1,6 @@
 
 import { useSocketContext } from '../../context/SocketContext';
 import useConversation from '../../zustand/UseConversation'
-import useMobileView from '../../zustand/UseMobileView';
 
 const Conversation = ({ conversation, lastIdx, emoji }) => {
   const { selectedConversation, setSelectedConversation } = useConversation()
@@ -10,7 +9,6 @@ const Conversation = ({ conversation, lastIdx, emoji }) => {
 
   const {onlineUsers} = useSocketContext();
   const isOnlie = onlineUsers.includes(conversation._id)
-  const { setMobileView } = useMobileView();
 
   return (
     <>
@@ -18,11 +16,7 @@ const Conversation = ({ conversation, lastIdx, emoji }) => {
         className={`flex gap-2 items-center hover:bg-red-400 rounded p-2 py-1 cursor-pointer
         ${isSelected ? "bg-red-400" : ""}
       `}
-        // onClick={() => setSelectedConversation(conversation)}
-        onClick={() => {
-  setSelectedConversation(conversation);
-  if (window.innerWidth < 768) setMobileView(true);
-}}
+        onClick={() => setSelectedConversation(conversation)}
       >
         <div className={`avatar ${isOnlie ? "online" : ""}`}>
           <div className='w-12 rounded-full'>
