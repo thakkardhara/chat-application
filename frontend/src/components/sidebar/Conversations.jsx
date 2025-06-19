@@ -17,34 +17,42 @@ const Conversations = () => {
     (conv) => conv._id !== loggedInUserId
   );
 
-  const handleDeleteChat = async (conversation) => {
-    try {
-      const token = Cookies.get("jwt");
+const handleDeleteChat = async (conversation) => {
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete this chat?"
+  );
+  if (!confirmDelete) return;
 
-      await axios.delete(
-        `https://chat-application-nod4.onrender.com/api/chat/${conversation._id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-           credentials: "include",
-          params: {
-            isGroup: false,
-            receiverId:
-              conversation._id !== loggedInUserId
-                ? conversation._id
-                : conversation.participants.find((id) => id !== loggedInUserId),
-          },
-        }
-      );
+  try {
+    const loggedInUser = JSON.parse(localStorage.getItem("chat-user"));
+    const loggedInUserId = loggedInUser?._id;
 
+    const receiverId =
+      conversation._id !== loggedInUserId
+        ? conversation._id
+        : conversation.participants.find((id) => id !== loggedInUserId);
+
+    const url = `https://chat-application-nod4.onrender.com/api/chat/${conversation._id}?isGroup=false&receiverId=${receiverId}`;
+
+    const res = await fetch(url, {
+      method: "DELETE",
+      credentials: "include" // 🔥 sends cookie with JWT
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
       toast.success("Chat deleted");
-      // Optionally refresh the conversation list if you're caching it
-    } catch (error) {
-      console.error("Error deleting chat:", error);
-      toast.error("Failed to delete chat");
+      // Optionally re-fetch conversations or update UI here
+    } else {
+      toast.error(data?.error || "Failed to delete chat");
     }
-  };
+  } catch (error) {
+    console.error("Error deleting chat:", error);
+    toast.error("Something went wrong");
+  }
+};
+
 
   return (
     <div className="py-2 flex flex-col overflow-auto">
@@ -59,7 +67,7 @@ const Conversations = () => {
             }
           />
           <button
-            className="text-red-500 text-lg p-2 hover:bg-red-200 rounded-full"
+            className="text-red-500 text-lg p-2"
             title="Delete Chat"
             onClick={() => handleDeleteChat(conversation)}
           >
