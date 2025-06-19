@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.post("/send/:id",protectRoutes,sendMsg)
 router.get("/:id",protectRoutes,getMsg)
+router.delete("/:id",protectRoutes,deleteChat)
 
 
 export default router;

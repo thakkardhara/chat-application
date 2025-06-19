@@ -100,3 +100,27 @@ export const getMsg = async(req, res) => {
   }
 }
 
+export const deleteChat = async (req, res) => {
+  try {
+    const { id: conversationId } = req.params;
+    const isGroup = req.query.isGroup === "true";
+
+    if (isGroup) {
+      // Group conversation delete karo
+      await Conversation.findByIdAndDelete(conversationId);
+    } else {
+      // One-to-one conversation delete karo
+      const senderId = req.user._id;
+      await Conversation.findOneAndDelete({
+        _id: conversationId,
+        participants: { $all: [senderId, req.query.receiverId] },
+        isGroup: false
+      });
+    }
+
+    res.status(200).json({ message: "Conversation deleted successfully" });
+  } catch (error) {
+    console.log("Error in deleting conversation", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}

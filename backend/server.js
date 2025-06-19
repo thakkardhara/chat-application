@@ -57,6 +57,7 @@ app.use("/api/auth", AuthRoutes);
 app.use("/api/message", MessageRoutes);
 app.use("/api/users", UserRoutes);
 app.use("/api/group", GroupRoutes);
+app.use("/api/chat", MessageRoutes);
 
 //express.static is middleware
 // Serve static files from frontend/dist

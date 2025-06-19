@@ -1,28 +1,68 @@
-import Conversation from './Conversation'
-import UseGetConversations from '../../hooks/UseGetConversations'
-import { getRandomEmoji } from '../../utils/Emoji'
-import useConversation from '../../zustand/UseConversation'
-
+import Conversation from "./Conversation";
+import UseGetConversations from "../../hooks/UseGetConversations";
+import { getRandomEmoji } from "../../utils/Emoji";
+import useConversation from "../../zustand/UseConversation";
+import toast from "react-hot-toast";
+import axios from "axios";
 const Conversations = () => {
   const { loading, conversations, groups } = UseGetConversations();
   const { selectedConversation, setSelectedConversation } = useConversation();
 
-  const loggedInUser = JSON.parse(localStorage.getItem('chat-user'));
+  const loggedInUser = JSON.parse(localStorage.getItem("chat-user"));
   const loggedInUserId = loggedInUser?._id;
 
-   const filteredConversations = conversations.filter(
+  const filteredConversations = conversations.filter(
     (conv) => conv._id !== loggedInUserId
   );
+
+  const handleDeleteChat = async (conversation) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("chat-user"))?.token;
+
+      await axios.delete(
+        `https://chat-application-nod4.onrender.com/api/chat/${conversation._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+           credentials: "include",
+          params: {
+            isGroup: false,
+            receiverId:
+              conversation._id !== loggedInUserId
+                ? conversation._id
+                : conversation.participants.find((id) => id !== loggedInUserId),
+          },
+        }
+      );
+
+      toast.success("Chat deleted");
+      // Optionally refresh the conversation list if you're caching it
+    } catch (error) {
+      console.error("Error deleting chat:", error);
+      toast.error("Failed to delete chat");
+    }
+  };
+
   return (
     <div className="py-2 flex flex-col overflow-auto">
       {/* Users */}
       {filteredConversations.map((conversation, idx) => (
-        <Conversation
-          key={conversation._id}
-          conversation={conversation}
-          emoji={getRandomEmoji()}
-          lastIdx={idx === filteredConversations.length - 1 && groups.length === 0}
-        />
+        <div className="flex justify-between items-center px-2 hover:bg-red-100 rounded">
+          <Conversation
+            conversation={conversation}
+            emoji={getRandomEmoji()}
+            lastIdx={
+              idx === filteredConversations.length - 1 && groups.length === 0
+            }
+          />
+          <button
+            className="text-red-500 text-sm hover:underline"
+            onClick={() => handleDeleteChat(conversation)}
+          >
+            Delete
+          </button>
+        </div>
       ))}
 
       {/* Separator for groups */}
@@ -40,11 +80,13 @@ const Conversations = () => {
           className={`flex flex-col gap-1 p-2 hover:bg-red-400 rounded cursor-pointer
             ${selectedConversation?._id === group._id ? "bg-red-400" : ""}
           `}
-          onClick={() => setSelectedConversation({
-            ...group,
-            fullname: group.groupName, // for display in header
-            isGroup: true
-          })}
+          onClick={() =>
+            setSelectedConversation({
+              ...group,
+              fullname: group.groupName, // for display in header
+              isGroup: true,
+            })
+          }
         >
           <div className="font-bold text-gray-200">{group.groupName}</div>
           <div className="text-xs text-gray-300">
@@ -53,9 +95,11 @@ const Conversations = () => {
         </div>
       ))}
 
-      {loading ? <span className='loading loading-spinner mx-auto'></span> : null}
+      {loading ? (
+        <span className="loading loading-spinner mx-auto"></span>
+      ) : null}
     </div>
-  )
-}
+  );
+};
 
 export default Conversations;
