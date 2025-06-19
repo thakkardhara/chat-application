@@ -7,15 +7,21 @@ const Conversations = () => {
   const { loading, conversations, groups } = UseGetConversations();
   const { selectedConversation, setSelectedConversation } = useConversation();
 
+  const loggedInUser = JSON.parse(localStorage.getItem('chat-user'));
+  const loggedInUserId = loggedInUser?._id;
+
+   const filteredConversations = conversations.filter(
+    (conv) => conv._id !== loggedInUserId
+  );
   return (
     <div className="py-2 flex flex-col overflow-auto">
       {/* Users */}
-      {conversations.map((conversation, idx) => (
+      {filteredConversations.map((conversation, idx) => (
         <Conversation
           key={conversation._id}
           conversation={conversation}
           emoji={getRandomEmoji()}
-          lastIdx={idx === conversations.length - 1 && groups.length === 0}
+          lastIdx={idx === filteredConversations.length - 1 && groups.length === 0}
         />
       ))}
 
