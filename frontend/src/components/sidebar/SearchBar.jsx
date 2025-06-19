@@ -9,6 +9,10 @@ const SearchBar = () => {
   const {setSelectedConversation}= useConversation();
   const {conversations}= UseGetConversations()
   
+   const loggedInUser = JSON.parse(localStorage.getItem("chat-user"));
+  const userInitial = loggedInUser?.fullname?.charAt(0)?.toUpperCase();
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!search) return;
@@ -31,13 +35,21 @@ const SearchBar = () => {
 
   return (
     <>
-    <form className='flex items-center gap-2' onSubmit={handleSubmit}>
-        <input type="text" placeholder="Search..." className='input input-bordered rounded-full'
-        value={search} onChange={(e)=> setSearch(e.target.value)} />
-        <button type='submit' className='btn btn-circle bg-red-400 text-white'>
-        <IoMdSearch className="w-6 h-6 outline-none" />
+  <form className="flex items-center gap-2" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Search..."
+          className="input input-bordered rounded-full"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <button
+          type="submit"
+          className="btn btn-circle bg-red-400 text-white text-lg font-bold"
+        >
+          {userInitial || "?"}
         </button>
-    </form>
+      </form>
     
     </>
   )
