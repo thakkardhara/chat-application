@@ -1,5 +1,5 @@
 import express from 'express'
-import { getMsg, sendMsg } from '../controller/MessageController.js';
+import { deleteChat, getMsg, sendMsg } from '../controller/MessageController.js';
 import protectRoutes from '../middleware/protectRoutes.js';
 
 const router = express.Router();
