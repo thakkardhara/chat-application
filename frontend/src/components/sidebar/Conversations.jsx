@@ -1,9 +1,11 @@
 import Conversation from "./Conversation";
 import UseGetConversations from "../../hooks/UseGetConversations";
-import { getRandomEmoji } from "../../utils/Emoji";
 import useConversation from "../../zustand/UseConversation";
 import toast from "react-hot-toast";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { FaTrashAlt } from "react-icons/fa";
+
 const Conversations = () => {
   const { loading, conversations, groups } = UseGetConversations();
   const { selectedConversation, setSelectedConversation } = useConversation();
@@ -17,7 +19,7 @@ const Conversations = () => {
 
   const handleDeleteChat = async (conversation) => {
     try {
-      const token = JSON.parse(localStorage.getItem("chat-user"))?.token;
+      const token = Cookies.get("jwt");
 
       await axios.delete(
         `https://chat-application-nod4.onrender.com/api/chat/${conversation._id}`,
@@ -51,16 +53,17 @@ const Conversations = () => {
         <div className="flex justify-between items-center px-2 hover:bg-red-100 rounded">
           <Conversation
             conversation={conversation}
-            emoji={getRandomEmoji()}
+            // emoji={getRandomEmoji()}
             lastIdx={
               idx === filteredConversations.length - 1 && groups.length === 0
             }
           />
           <button
-            className="text-red-500 text-sm hover:underline"
+            className="text-red-500 text-lg p-2 hover:bg-red-200 rounded-full"
+            title="Delete Chat"
             onClick={() => handleDeleteChat(conversation)}
           >
-            Delete
+            <FaTrashAlt />
           </button>
         </div>
       ))}
